@@ -3,6 +3,8 @@ import http from "http";
 import mongoose from "mongoose";
 import { config } from "./config/config";
 import Logging from "./library/Logging";
+import AuthorRoutes from "./routes/Author";
+
 
 const router = express();
 mongoose
@@ -46,6 +48,8 @@ const StartServer = () => {
 
     next();
   });
+
+  router.use("/author", AuthorRoutes);
 
   router.get('/ping', (req, res,next) => {
     res.status(200).json({
