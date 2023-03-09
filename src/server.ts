@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { config } from "./config/config";
 import Logging from "./library/Logging";
 import AuthorRoutes from "./routes/Author";
-
+import BookRoutes from "./routes/Book";
 
 const router = express();
 mongoose
@@ -38,28 +38,35 @@ const StartServer = () => {
   router.use(express.json());
 
   router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
 
-    if (req.method == 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-        return res.status(200).json({});
+    if (req.method == "OPTIONS") {
+      res.header(
+        "Access-Control-Allow-Methods",
+        "PUT, POST, PATCH, DELETE, GET"
+      );
+      return res.status(200).json({});
     }
 
     next();
   });
 
   router.use("/author", AuthorRoutes);
+  router.use("/books", BookRoutes);
 
-  router.get('/ping', (req, res,next) => {
+  router.get("/ping", (req, res, next) => {
     res.status(200).json({
-        message: 'Pong'
+      message: "Pong",
     });
   });
 
   router.use((req, res, next) => {
     const error = new Error("Not found");
-Logging.error(error);
-return res.status(404).json({ error: error.message });
+    Logging.error(error);
+    return res.status(404).json({ error: error.message });
   });
 };
